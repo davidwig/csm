@@ -20,10 +20,10 @@ plot_theme <- ggplot2::theme(
     family = "Arial",
     face = "bold",
     color = "black",
-    size = 14
+    size = 10
     ),
   plot.title = ggplot2::element_text(
-    size = 14,
+    size = 12,
     hjust = 0.5
   ),
   axis.text = ggplot2::element_text(

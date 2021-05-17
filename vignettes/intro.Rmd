@@ -1,5 +1,5 @@
 ---
-title: "intro"
+title: "Intro to CSM Package"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{intro}
@@ -10,10 +10,58 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  warning = FALSE,
+  message = FALSE
 )
 ```
 
 ```{r setup}
+# CSM package
 library(csm)
+
+# Other packages
+library(tidyverse)
+library(lubridate)
+library(Cairo)
+
+first <- function(x) head(x, 1)
+last <- function(x) tail(x, 1)
 ```
+
+
+
+
+# Plot Example
+
+Suppose we have data that looks like this:
+```{r}
+time <- seq.Date(as.Date("1960-03-31"), as.Date("1980-12-31"), by = "quarter")
+jj_revenue <- as.numeric(JohnsonJohnson)
+df <- data.frame(time, jj_revenue)
+head(df)
+```
+
+```{r, fig.width=4*1.5, fig.height=3*1.5}
+chart <- ggplot(data = df) +
+  aes(x = time, y = jj_revenue) +
+  add_rec_shade(first(df$time), last(df$time)) + 
+  geom_line(color = csm_green(), size = 1.2) +
+  scale_x_date(date_labels = "%y") +
+  labs(title = paste0("Johnson & Johnson Revenue \n ",
+                      "Q",
+                      last(quarter(time)),
+                      ":",
+                      last(year(time)),
+                      ": ",
+                      "$",
+                      last(jj_revenue), 
+                      " Million")) +
+  theme_csm()
+```
+
+```{r, out.width="70%", out.height="70%"}
+ggsave("jnj_revenue.png", chart, dpi = 700, width = 4, height = 3)
+knitr::include_graphics("jnj_revenue.png")
+```
+
