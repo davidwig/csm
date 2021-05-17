@@ -23,7 +23,7 @@ best_model <- function(y, x, crit = "BIC", quick = FALSE) {
   if(is.null(x)) stop("Argument `x` must be specified")
   if(!is.data.frame(y)) stop("Argument `y` must be a data.frame object")
   if(!is.data.frame(x)) stop("Argument `x` must be a data.frame object")
-  if(ncol(x) > 10) stop("Data is large. Please set argument `quick` to TRUE.")
+  if(ncol(x) > 14 & quick == FALSE) stop("Data is large. Please set argument `quick` to TRUE.")
 
   ### Define dataframe
   df <- dplyr::bind_cols(x, y)

@@ -32,7 +32,7 @@ last <- function(x) tail(x, 1)
 
 
 
-# Plot Example
+### Plot Example
 
 Suppose we have data that looks like this:
 ```{r}
@@ -63,5 +63,16 @@ chart <- ggplot(data = df) +
 ```{r, out.width="70%", out.height="70%"}
 ggsave("jnj_revenue.png", chart, dpi = 700, width = 4, height = 3)
 knitr::include_graphics("jnj_revenue.png")
+```
+
+
+### Example: Find The Best Model
+```{r}
+df <- MASS::Boston
+head(df)
+house_val <- df %>% select(medv)
+predictors <- df %>% select(-medv)
+reg <- best_model(house_val, predictors)
+summary(reg)
 ```
 
