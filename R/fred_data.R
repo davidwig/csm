@@ -40,3 +40,21 @@ get_fred_qd <- function() {
 fred_md_site <- function() {
   browseURL("https://research.stlouisfed.org/econ/mccracken/fred-databases/")
 }
+
+#' Go To FRED-MD/FRED-QD Website
+#'
+#' This function differences time series until KPSS Test deems stationary at 95% confidence level.
+#'
+#' @param x Input vector
+#' @return Output vector
+#' @export
+
+diff_til_stat <- function(x) {
+  if(!is.numeric(x)) stop("Input `x` must be a numeric vector")
+  if(forecast::ndiffs(x) == 0) {
+    out <- x
+  } else {
+    out <- c(rep(NA, forecast::ndiffs(x)), diff(x, forecast::ndiffs(x)))
+  }
+  return(out)
+}
