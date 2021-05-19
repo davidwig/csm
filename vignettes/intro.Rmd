@@ -44,6 +44,12 @@ df <- data.frame(time, jj_revenue)
 head(df)
 ```
 
+`theme_csm` imitates CSM's Excel aesthetics. \
+`add_rec_shad` easily adds recession bars. \
+`csm_green` pulls in CSM's official green shade.
+
+You can use these procedures to automate charts that use data APIs compatible with R.
+
 ```{r, out.width="70%", out.height="70%"}
 chart <- ggplot(data = df) +
   aes(x = time, y = jj_revenue) +
@@ -66,9 +72,21 @@ knitr::include_graphics("jnj_revenue.png")
 
 
 ### Example: Find The Best Model
+
+Since the 10-Year Bond Model, we have referred to "best subset selection" as the "Best Model" method.
+
+Given an  $n \times 1$ outcome $Y$ and $n \times k$ space of predictors $Z$, use exhaustive search to find the least-squares linear model $Y = X \hat \beta + \hat \varepsilon, X \subseteq Z$ that optimizes an information criterion: Bayesian or Akaike.
+
+If $k \geq 15$ exhuastive search is infeasible, so we use step-wise search.
+
+Suppose we have data that looks like this.
 ```{r}
 df <- MASS::Boston
 head(df)
+```
+
+Easily find the best combination of variables to predict `medv`.
+```{r}
 house_val <- df %>% select(medv)
 predictors <- df %>% select(-medv)
 reg <- best_model(house_val, predictors)

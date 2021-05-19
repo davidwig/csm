@@ -44,3 +44,5 @@ best_model <- function(y, x, crit = "BIC", quick = FALSE) {
   return(out)
 
 }
+
+
