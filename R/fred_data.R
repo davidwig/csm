@@ -11,7 +11,7 @@
 
 get_fred_md <- function() {
   my_data <- readr::read_csv("https://files.stlouisfed.org/files/htdocs/fred-md/monthly/current.csv")
-  my_data <- dplyr::slice(my_data, -1)
+  # my_data <- dplyr::slice(my_data, -1)
   out <- dplyr::mutate(my_data, sasdate = lubridate::mdy(sasdate))
   return(out)
 }
@@ -25,7 +25,7 @@ get_fred_md <- function() {
 
 get_fred_qd <- function() {
   my_data <- readr::read_csv("https://files.stlouisfed.org/files/htdocs/fred-md/quarterly/current.csv")
-  my_data <- dplyr::slice(my_data, -c(1:2))
+  # my_data <- dplyr::slice(my_data, -c(1:2))
   out <- dplyr::mutate(my_data, sasdate = lubridate::mdy(sasdate))
   return(out)
 }

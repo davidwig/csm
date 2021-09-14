@@ -73,7 +73,7 @@ theme_csm <- function() plot_theme
 #' @export
 add_rec_shade <- function(st_date, ed_date, shade_color = "darkgray") {
 
-  quantmod::getSymbols.FRED("USRECD", env = .GlobalEnv, return.class = "data.frame")
+  quantmod::getSymbols.FRED("USRECDM", env = .GlobalEnv, return.class = "data.frame")
   recession <- USRECD
   recession$value <- recession$USRECD
   recession$date <- lubridate::ymd(rownames(recession))
