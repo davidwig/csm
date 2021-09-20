@@ -74,8 +74,8 @@ theme_csm <- function() plot_theme
 add_rec_shade <- function(st_date, ed_date, shade_color = "darkgray") {
 
   quantmod::getSymbols.FRED("USRECDM", env = .GlobalEnv, return.class = "data.frame")
-  recession <- USRECD
-  recession$value <- recession$USRECD
+  recession <- USRECDM
+  recession$value <- recession$USRECDM
   recession$date <- lubridate::ymd(rownames(recession))
   recession <- dplyr::filter(recession, date >= st_date & date <= ed_date)
   recession$diff <- recession$value - ecm::lagpad(recession$value, k = 1)
