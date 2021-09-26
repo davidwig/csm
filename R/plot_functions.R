@@ -71,40 +71,47 @@ theme_csm <- function() plot_theme
 #' @param shade_color Color of recession bars
 #' @return A geom_rect object
 #' @export
-add_rec_shade <- function(st_date, ed_date, shade_color = "darkgray") {
-
-  quantmod::getSymbols.FRED("USRECDM", env = .GlobalEnv, return.class = "data.frame")
-  recession <- USRECDM
-  recession$value <- recession$USRECDM
-  recession$date <- lubridate::ymd(rownames(recession))
-  recession <- dplyr::filter(recession, date >= st_date & date <= ed_date)
-  recession$diff <- recession$value - ecm::lagpad(recession$value, k = 1)
-  recession <- recession[!is.na(recession$diff), ]
-  recession.start <- recession[recession$diff == 1, ]$date
-  recession.end <- recession[recession$diff == (-1), ]$date
-
-  if (length(recession.start) > length(recession.end)) {
-    recession.end <- c(recession.end, Sys.Date())
-  }
-  if (length(recession.end) > length(recession.start)) {
-    recession.start <- c(min(recession$date), recession.start)
-  }
-
-  recs <- as.data.frame(cbind(recession.start, recession.end))
-  recs$recession.start <- as.Date(as.numeric(recs$recession.start), origin = as.Date("1970-01-01"))
-  recs$recession.end <- as.Date(recs$recession.end, origin = as.Date("1970-01-01"))
-
-  if (nrow(recs) > 0) {
-    rec_shade <- ggplot2::geom_rect(
-      data = recs,
-      inherit.aes = FALSE,
-      aes(xmin = recession.start, xmax = recession.end, ymin = -Inf, ymax = +Inf),
-      fill = shade_color,
-      alpha = 0.5
-    )
-    return(rec_shade)
-  }
-
+add_rec_shade <- function(st_date, shade_color = "darkgray") {
+  recessions_df <- read.table(textConnection(
+      "Peak, Trough
+  1857-06-01, 1858-12-01
+  1860-10-01, 1861-06-01
+  1865-04-01, 1867-12-01
+  1869-06-01, 1870-12-01
+  1873-10-01, 1879-03-01
+  1882-03-01, 1885-05-01
+  1887-03-01, 1888-04-01
+  1890-07-01, 1891-05-01
+  1893-01-01, 1894-06-01
+  1895-12-01, 1897-06-01
+  1899-06-01, 1900-12-01
+  1902-09-01, 1904-08-01
+  1907-05-01, 1908-06-01
+  1910-01-01, 1912-01-01
+  1913-01-01, 1914-12-01
+  1918-08-01, 1919-03-01
+  1920-01-01, 1921-07-01
+  1923-05-01, 1924-07-01
+  1926-10-01, 1927-11-01
+  1929-08-01, 1933-03-01
+  1937-05-01, 1938-06-01
+  1945-02-01, 1945-10-01
+  1948-11-01, 1949-10-01
+  1953-07-01, 1954-05-01
+  1957-08-01, 1958-04-01
+  1960-04-01, 1961-02-01
+  1969-12-01, 1970-11-01
+  1973-11-01, 1975-03-01
+  1980-01-01, 1980-07-01
+  1981-07-01, 1982-11-01
+  1990-07-01, 1991-03-01
+  2001-03-01, 2001-11-01
+  2007-12-01, 2009-06-01"), sep=',',
+      colClasses=c('Date', 'Date'), header=TRUE)
+  out <- ggplot2::geom_rect(data = recessions_df[recessions_df$Peak >= st_date, ],
+                            aes(xmin = Peak, xmax = Trough, ymin = -Inf, ymax = +Inf),
+                            fill=shade_color)
+  return(out)
 }
 
 #' CSM Green
